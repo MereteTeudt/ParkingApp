@@ -6,20 +6,13 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Database
+    public static class Database
     {
-        public Database()
-        {
-            ParkClients = new List<ParkClient>()
-            {
-                new ParkClient() { LicensePlate = new LicensePlate("AA11111"), CompanyparkCode = "XXXX1"},
-                new ParkClient() { LicensePlate = new LicensePlate("AA22222"), CompanyparkCode = "XXXX2"},
-                new ParkClient() { LicensePlate = new LicensePlate("AA33333"), CompanyparkCode = "XXXX3"}
-            };
-        }
-        public List<ParkClient> ParkClients { get; set; }
+        public static List<ParkClient> ParkClients = new List<ParkClient>(GenerateDatabase());
 
-        public List<ParkClient> GenerateDatabase()
+        public static string Test { get; set; }
+
+        public static List<ParkClient> GenerateDatabase()
         {
             ParkClients = new List<ParkClient>();
             for (int i = 0; i < 100; i++)

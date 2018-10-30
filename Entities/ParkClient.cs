@@ -10,6 +10,6 @@ namespace Entities
     {
         public LicensePlate LicensePlate { get; set; }
 
-        public string CompanyparkCode { get; set; }
+        public string CompanyParkingCode { get; set; }
     }
 }

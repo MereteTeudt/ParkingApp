@@ -10,30 +10,30 @@ namespace ParkingAPI.Controllers
 {
     public class ParkClientController : ApiController
     {
-        Database database = new Database();
+        List<ParkClient> parkClients = Database.ParkClients;
 
         // GET: api/ParkClient
         public List<ParkClient> Get()
         {
-            return database.ParkClients;
+            return Database.ParkClients;
         }
 
         // GET: api/ParkClient/XX00000
         public ParkClient Get(string licenseNumber)
         {
-            return database.ParkClients.Where(x => x.LicensePlate.LicenseNumber == licenseNumber).FirstOrDefault();
+            return Database.ParkClients.Where(x => x.LicensePlate.LicenseNumber == licenseNumber).FirstOrDefault();
         }
 
         // POST: api/ParkClient
         public void Post(ParkClient val)
         {
-            database.ParkClients.Add(val);
+            Database.ParkClients.Add(val);
         }
 
         // PUT: api/ParkClient/5
         public void Put(ParkClient val)
         {
-            ParkClient parkClient = database.ParkClients.Where(x => x.LicensePlate.LicenseNumber == val.LicensePlate.LicenseNumber).FirstOrDefault();
+            ParkClient parkClient = Database.ParkClients.Where(x => x.LicensePlate.LicenseNumber == val.LicensePlate.LicenseNumber).FirstOrDefault();
             parkClient = val;
         }
 
