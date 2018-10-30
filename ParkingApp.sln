@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{13C91D70-678E-412C-94B0-370B10187702}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities.Tests", "Entities.Tests\Entities.Tests.csproj", "{B55C3320-A87D-4D8B-BAFE-4AA5F9A7977A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingAPI", "ParkingAPI\ParkingAPI.csproj", "{3E06B454-B175-4160-BC82-A83A23BBC8D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{13C91D70-678E-412C-94B0-370B10187702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13C91D70-678E-412C-94B0-370B10187702}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13C91D70-678E-412C-94B0-370B10187702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B55C3320-A87D-4D8B-BAFE-4AA5F9A7977A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B55C3320-A87D-4D8B-BAFE-4AA5F9A7977A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B55C3320-A87D-4D8B-BAFE-4AA5F9A7977A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B55C3320-A87D-4D8B-BAFE-4AA5F9A7977A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E06B454-B175-4160-BC82-A83A23BBC8D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E06B454-B175-4160-BC82-A83A23BBC8D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E06B454-B175-4160-BC82-A83A23BBC8D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E06B454-B175-4160-BC82-A83A23BBC8D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

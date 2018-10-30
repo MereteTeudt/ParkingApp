@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Class1
+    public class ParkClient
     {
+        public LicensePlate LicensePlate { get; set; }
+
+        public string CompanyparkCode { get; set; }
     }
 }
