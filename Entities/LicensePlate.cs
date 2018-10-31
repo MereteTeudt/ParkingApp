@@ -8,6 +8,9 @@ namespace Entities
 {
     public class LicensePlate
     {
+        public int LicensePlateID { get; }
+
+        public int ParkClientIDKey { get; set; }
 
         public LicensePlate(string licenseNumber)
         {
@@ -27,7 +30,7 @@ namespace Entities
             for(int i = 0; i < 2; i++)
             {
                 int num = random.Next(0, 26);
-                randomChars += (char)('a' + num);
+                randomChars += (char)('A' + num);
             }
             return randomChars;
         }

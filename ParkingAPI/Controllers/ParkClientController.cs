@@ -38,8 +38,10 @@ namespace ParkingAPI.Controllers
         }
 
         // DELETE: api/ParkClient/5
-        public void Delete(int id)
+        public void Delete(string licenseNumber)
         {
+            ParkClient parkClient = Database.ParkClients.Where(x => x.LicensePlate.LicenseNumber == licenseNumber).FirstOrDefault();
+            Database.ParkClients.Remove(parkClient);
         }
     }
 }

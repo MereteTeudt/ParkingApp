@@ -74,7 +74,7 @@ namespace Entities.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
+        /*[Fact]
         public void GenerateDatabase_GenerateListOfParkClients()
         {
             // Arrange / Act
@@ -83,7 +83,7 @@ namespace Entities.Tests
             ParkClient second = Database.ParkClients[1];
             // Assert
             Assert.NotEqual(first.LicensePlate, second.LicensePlate);
-        }
+        }*/
 
         [Fact]
         public void GenerateLicensePlate_GenerateDifferentLicensePlates()
