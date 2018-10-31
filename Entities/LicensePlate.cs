@@ -19,7 +19,7 @@ namespace Entities
         }
         public string LicenseNumber { get; set; }
 
-        private readonly Random random = new Random();
+        private static readonly Random random = new Random();
 
         public string RandomChars()
         {

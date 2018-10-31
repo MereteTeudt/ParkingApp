@@ -77,15 +77,27 @@ namespace Entities.Tests
         [Fact]
         public void GenerateDatabase_GenerateListOfParkClients()
         {
-            // Arrange
-            Database database = new Database();
-            database.ParkClients = new List<ParkClient>();
-            // Act
-            database.ParkClients = database.GenerateDatabase();
-            ParkClient first = database.ParkClients[0];
-            ParkClient second = database.ParkClients[1];
+            // Arrange / Act
+            Database.ParkClients = Database.GenerateDatabase();
+            ParkClient first = Database.ParkClients[0];
+            ParkClient second = Database.ParkClients[1];
             // Assert
             Assert.NotEqual(first.LicensePlate, second.LicensePlate);
+        }
+
+        [Fact]
+        public void GenerateLicensePlate_GenerateDifferentLicensePlates()
+        {
+            // Arrange
+            List<LicensePlate> licensePlates = new List<LicensePlate>();
+            // Act
+            for (int i = 0; i < 10; i++)
+            {
+                LicensePlate licensePlate = new LicensePlate();
+                licensePlates.Add(licensePlate.GenerateLicensePlate());
+            }
+            // Assert
+            Assert.NotEqual(licensePlates[0].LicenseNumber, licensePlates[1].LicenseNumber);
         }
     }
 }
