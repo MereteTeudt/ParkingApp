@@ -496,14 +496,32 @@
             <summary>
             Gets a ParkClient based on a given licenseplate number.
             </summary>
-            <param name="licenseNumber">The licensenumber that the client is registered with.</param>
+            <param name="licenseNumber">The licensenumber that the client is registered with. Consists of two letters and five numbers.</param>
             <returns>A client with the given licensenumber</returns>
         </member>
         <member name="M:ParkingAPI.Controllers.ParkClientController.GetLicenseNumbers">
             <summary>
-            Gets a list of licenseplate numbers registered in the database
+            Gets a list of licenseplate numbers registered in the database.
             </summary>
-            <returns>A list of licensenumbers in the database</returns>
+            <returns>A list of licensenumbers in the database.</returns>
+        </member>
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Post(Entities.ParkClient)">
+            <summary>
+            Registers a new client.
+            </summary>
+            <param name="client">The required information in the client object is the companyparkingcode and the licensenumber.</param>
+        </member>
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.String)">
+            <summary>
+            Updates an existing client.
+            </summary>
+            <param name="licenseNumber">The licensenumber that the client is registered with.</param>
+        </member>
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Delete(System.String)">
+            <summary>
+            Deletes a client from the database.
+            </summary>
+            <param name="licenseNumber">The licensenumber that the client is registered with.</param>
         </member>
     </members>
 </doc>
