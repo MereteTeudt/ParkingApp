@@ -8,9 +8,22 @@ namespace Entities
 {
     public class LicensePlate
     {
-        public int LicensePlateID { get; }
+        /// <summary>
+        /// ID from SQL
+        /// </summary>
+        public int LicensePlateID { get; set; }
 
+        /// <summary>
+        /// Foreign key for SQL
+        /// </summary>
         public int ParkClientIDKey { get; set; }
+
+        /// <summary>
+        /// The number on the licenseplate, consists of two letters and five numbers
+        /// </summary>
+        public string LicenseNumber { get; set; }
+
+        private static readonly Random random = new Random();
 
         public LicensePlate(string licenseNumber)
         {
@@ -20,9 +33,6 @@ namespace Entities
         public LicensePlate()
         {
         }
-        public string LicenseNumber { get; set; }
-
-        private static readonly Random random = new Random();
 
         public string RandomChars()
         {

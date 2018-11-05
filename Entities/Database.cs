@@ -25,9 +25,11 @@ namespace Entities
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                connection.Execute("ParkingClients_Insert @CompanyParkingCode", new { @CompanyParkingCode = client.CompanyParkingCode });
-                connection.Execute("LicensePlates_Insert @LicenseNumber", new { @LicenseNumber = client.LicensePlate.LicenseNumber });
-                connection.Execute("LicensePlates_Insert @ParkClientIDKey", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey });
+                connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = client.CompanyParkingCode });
+                string parkClientIDKey = connection.ExecuteScalar("SELECT MAX(ParkClientID) FROM ParkClients WHERE CompanyParkingCode = @CompanyParkingCode", new { @CompanyParkingCode = client.CompanyParkingCode }).ToString();
+                connection.Execute("INSERT INTO LicensePlates (ParkClientIDKey, LicenseNumber) VALUES (@ParkClientIDKey, @LicenseNumber)", new { @ParkClientIDKey = parkClientIDKey, @LicenseNumber = client.LicensePlate.LicenseNumber });
+
+
             }
         }
         /// <summary>
@@ -57,23 +59,42 @@ namespace Entities
             LicensePlate licensePlate = new LicensePlate();
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
+                try
+                {
+                    licensePlate = connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
+                }
+                catch (InvalidOperationException)
+                {
+                    throw new Exception("En klient med denne nummerplade findes ikke i databasen");
+                }
                 licensePlate= connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
                 parkClient = connection.QuerySingle<ParkClient>("SELECT * FROM ParkClients WHERE ParkClientID = @ParkClientIDKey", new { @ParkClientIDKey = licensePlate.ParkClientIDKey });
                 parkClient.LicensePlate = licensePlate;
                 return parkClient;
             }
         }
+        public static List<string> ReadLicenseNumbers()
+        {
+            List<string> licenseNumbers = new List<string>();
+            List<ParkClient> parkClients = ReadParkClients();
+            foreach(ParkClient client in parkClients)
+            {
+                licenseNumbers.Add(client.LicensePlate.LicenseNumber);
+            }
+            return licenseNumbers;
+        }
         /// <summary>
         /// UPDATE
         /// </summary>
         /// <param name="client"></param>
-        public static void UpdateParkClient(ParkClient client)
+        public static void UpdateParkClient(string licenseNumber)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                connection.Execute("UPDATE ParkClients SET CompanyParkCode = @CompanyParkCode WHERE ParkClientID = @ParkClientID", new { @ParkClientID = client.ParkClientID });
-                connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicensePlateID = client.LicensePlate.LicensePlateID });
-                connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @LicensePlateID = client.LicensePlate.LicensePlateID });
+                ParkClient client = ReadParkClient(licenseNumber);
+                connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = client.CompanyParkingCode, @ParkClientID = client.ParkClientID });
+                connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID});
+                connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
             }
         }
         /// <summary>
@@ -86,8 +107,8 @@ namespace Entities
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
                 licensePlate = connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
-                connection.Execute("DELETE FROM ParkClients WHERE ParkClientID = @ParkClientIDKey", new { @ParkClientIDKey = licensePlate.ParkClientIDKey });
                 connection.Execute("DELETE FROM LicensePlates WHERE LicensePlateID = @LicensePlateID", new { @LicensePlateID = licensePlate.LicensePlateID });
+                connection.Execute("DELETE FROM ParkClients WHERE ParkClientID = @ParkClientIDKey", new { @ParkClientIDKey = licensePlate.ParkClientIDKey });
             }
         }
 
