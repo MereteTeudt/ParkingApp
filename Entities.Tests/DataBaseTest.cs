@@ -10,7 +10,7 @@ namespace Entities.Tests
     public class DataBaseTest
     {
         [Fact]
-        public void GetParkClients_GetsParkClients()
+        public static void ReadParkClients_ReturnsListOfParkClients()
         {
             // Arrange
 
