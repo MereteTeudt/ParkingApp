@@ -4,19 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkingGUI"
-        mc:Ignorable="d"
-        Title="Failure" Height="300" Width="500">
+        mc:Ignorable="d" FontSize="20"
+        Title="Failure" Height="300" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Label VerticalAlignment="Bottom" 
+               HorizontalAlignment="Center"
+               Content="{Binding Path=LicenseNumberChecked}"
+               Grid.Column="1" />
         <Image Source="Images\Cross.jpg"
                Grid.Row="1"
                Grid.Column="1" />

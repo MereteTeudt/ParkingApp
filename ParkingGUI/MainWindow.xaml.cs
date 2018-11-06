@@ -39,7 +39,7 @@ namespace ParkingGUI
             }
             else
             {
-                Failure failureWindow = new Failure();
+                Failure failureWindow = new Failure(textBoxLicenseNumber.Text);
                 failureWindow.Show();
             }
         }

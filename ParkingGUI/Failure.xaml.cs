@@ -19,9 +19,12 @@ namespace ParkingGUI
     /// </summary>
     public partial class Failure : Window
     {
-        public Failure()
+        public Failure(string licenseNumber)
         {
             InitializeComponent();
+            LicenseNumberChecked = licenseNumber;
+            DataContext = this;
         }
+        public string LicenseNumberChecked { get; set; }
     }
 }

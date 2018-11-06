@@ -20,7 +20,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Label Content="Nummerplade: " VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
-        <TextBox x:Name="textBoxLicenseNumber" VerticalAlignment="Center"
+        <TextBox x:Name="textBoxLicenseNumber" 
+                 CharacterCasing="Upper"
+                 VerticalAlignment="Center"
                  Grid.Row="1"
                  Grid.Column="2" />
         <Button Content="Check" 
