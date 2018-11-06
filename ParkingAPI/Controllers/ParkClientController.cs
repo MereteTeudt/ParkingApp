@@ -45,23 +45,25 @@ namespace ParkingAPI.Controllers
         }
 
         /// <summary>
-        /// Registers a new client.
+        /// Register a new client
         /// </summary>
-        /// <param name="client">The required information in the client object is the companyparkingcode and the licensenumber.</param>
+        /// <param name="licenseNumber">The licenseplate number of the clients vehicle</param>
+        /// <param name="companyParkingCode">The parking code given to the client by their employers</param>
         // POST: api/ParkClient
-        public void Post(ParkClient client)
+        public void Post(string licenseNumber, string companyParkingCode)
         {
-            Database.CreateParkClient(client);
+            Database.CreateParkClient(licenseNumber, companyParkingCode);
         }
 
         /// <summary>
         /// Updates an existing client.
         /// </summary>
         /// <param name="licenseNumber">The licensenumber that the client is registered with.</param>
+        /// <param name="companyParkingCode">The parking code to be updated.</param>
         // PUT: api/ParkClient/5
-        public void Put(string licenseNumber)
+        public void Put(string licenseNumber, string companyParkingCode)
         {
-            Database.UpdateParkClient(licenseNumber);
+            Database.UpdateParkClient(licenseNumber, companyParkingCode);
         }
 
         

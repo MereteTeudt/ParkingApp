@@ -18,16 +18,17 @@ namespace Entities
         }
 
         /// <summary>
-        /// CEATE
+        /// CREATE
         /// </summary>
-        /// <param name="client"></param>
-        public static void CreateParkClient(ParkClient client)
+        /// <param name="licenseNumber"></param>
+        /// <param name="companyParkingCode"></param>
+        public static void CreateParkClient(string licenseNumber, string companyParkingCode)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = client.CompanyParkingCode });
-                string parkClientIDKey = connection.ExecuteScalar("SELECT MAX(ParkClientID) FROM ParkClients WHERE CompanyParkingCode = @CompanyParkingCode", new { @CompanyParkingCode = client.CompanyParkingCode }).ToString();
-                connection.Execute("INSERT INTO LicensePlates (ParkClientIDKey, LicenseNumber) VALUES (@ParkClientIDKey, @LicenseNumber)", new { @ParkClientIDKey = parkClientIDKey, @LicenseNumber = client.LicensePlate.LicenseNumber });
+                connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = companyParkingCode });
+                string parkClientIDKey = connection.ExecuteScalar("SELECT MAX(ParkClientID) FROM ParkClients WHERE CompanyParkingCode = @CompanyParkingCode", new { @CompanyParkingCode = companyParkingCode }).ToString();
+                connection.Execute("INSERT INTO LicensePlates (ParkClientIDKey, LicenseNumber) VALUES (@ParkClientIDKey, @LicenseNumber)", new { @ParkClientIDKey = parkClientIDKey, @LicenseNumber = licenseNumber });
 
 
             }
@@ -87,12 +88,12 @@ namespace Entities
         /// UPDATE
         /// </summary>
         /// <param name="client"></param>
-        public static void UpdateParkClient(string licenseNumber)
+        public static void UpdateParkClient(string licenseNumber, string companyParkingCode)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
                 ParkClient client = ReadParkClient(licenseNumber);
-                connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = client.CompanyParkingCode, @ParkClientID = client.ParkClientID });
+                connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
                 connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID});
                 connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
             }
