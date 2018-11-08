@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using static Entities.Database;
 
 namespace ParkingAPI.Controllers
 {
@@ -20,7 +21,14 @@ namespace ParkingAPI.Controllers
         // GET: api/ParkClient
         public List<ParkClient> Get()
         {
-            return Database.ReadParkClients();
+            try
+            {
+                return Database.ReadParkClients();
+            }
+            catch
+            {
+                throw new Exception("An unexpected error occured");
+            }
         }
 
         /// <summary>
@@ -31,7 +39,14 @@ namespace ParkingAPI.Controllers
         // GET: api/ParkClient/XX00000
         public ParkClient Get(string licenseNumber)
         {
-            return Database.ReadParkClient(licenseNumber);
+            try
+            {
+                return Database.ReadParkClient(licenseNumber);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -41,18 +56,32 @@ namespace ParkingAPI.Controllers
         [Route("api/ParkClient/GetLicenseNumbers")]
         public List<string> GetLicenseNumbers()
         {
-            return Database.ReadLicenseNumbers();
+            try
+            {
+                return Database.ReadLicenseNumbers();
+            }
+            catch
+            {
+                throw new Exception("An unexpected error occured");
+            }
         }
 
         /// <summary>
         /// Register a new client
         /// </summary>
-        /// <param name="licenseNumber">The licenseplate number of the clients vehicle</param>
-        /// <param name="companyParkingCode">The parking code given to the client by their employers</param>
+        /// <param name="data">A struct containing the necessary data to register a new client, licensenumber and company parking code</param>
         // POST: api/ParkClient
-        public void Post(string licenseNumber, string companyParkingCode)
+        [System.Web.Mvc.HttpPost]
+        public void Post(ClientData data)
         {
-            Database.CreateParkClient(licenseNumber, companyParkingCode);
+            try
+            {
+                Database.CreateParkClient(data);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -63,7 +92,14 @@ namespace ParkingAPI.Controllers
         // PUT: api/ParkClient/5
         public void Put(string licenseNumber, string companyParkingCode)
         {
-            Database.UpdateParkClient(licenseNumber, companyParkingCode);
+            try
+            {
+                Database.UpdateParkClient(licenseNumber, companyParkingCode);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         
@@ -74,7 +110,14 @@ namespace ParkingAPI.Controllers
         // DELETE: api/ParkClient/5
         public void Delete(string licenseNumber)
         {
-            Database.DeleteParkClient(licenseNumber);
+            try
+            {
+                Database.DeleteParkClient(licenseNumber);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

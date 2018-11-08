@@ -11,7 +11,11 @@ namespace Entities
 {
     public static class Database
     {
-
+        public struct ClientData
+        {
+            public string CompanyParkingCode { get; set; }
+            public string LicenseNumber { get; set; }
+        }
         public static string ConString(string name)
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
@@ -22,15 +26,34 @@ namespace Entities
         /// </summary>
         /// <param name="licenseNumber"></param>
         /// <param name="companyParkingCode"></param>
-        public static void CreateParkClient(string licenseNumber, string companyParkingCode)
+        public static void CreateParkClient(ClientData data)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = companyParkingCode });
-                string parkClientIDKey = connection.ExecuteScalar("SELECT MAX(ParkClientID) FROM ParkClients WHERE CompanyParkingCode = @CompanyParkingCode", new { @CompanyParkingCode = companyParkingCode }).ToString();
-                connection.Execute("INSERT INTO LicensePlates (ParkClientIDKey, LicenseNumber) VALUES (@ParkClientIDKey, @LicenseNumber)", new { @ParkClientIDKey = parkClientIDKey, @LicenseNumber = licenseNumber });
-
-
+                ParkClient client = new ParkClient();
+                LicensePlate licensePlate = new LicensePlate();
+                licensePlate.LicenseNumber = data.LicenseNumber;
+                client.LicensePlate = licensePlate;
+                client.CompanyParkingCode = data.CompanyParkingCode;
+                try
+                {
+                    ReadParkClient(client.LicensePlate.LicenseNumber);
+                    throw new Exception("The submitted licensenumber is already registered.");
+                }
+                catch
+                {
+                    if (VerifyParkingCode(client.CompanyParkingCode))
+                    {
+                        connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = client.CompanyParkingCode });
+                        string parkClientIDKey = connection.ExecuteScalar("SELECT MAX(ParkClientID) FROM ParkClients WHERE CompanyParkingCode = @CompanyParkingCode", new { @CompanyParkingCode = client.CompanyParkingCode }).ToString();
+                        connection.Execute("INSERT INTO LicensePlates (ParkClientIDKey, LicenseNumber) VALUES (@ParkClientIDKey, @LicenseNumber)", new { @ParkClientIDKey = parkClientIDKey, @LicenseNumber = client.LicensePlate.LicenseNumber });
+                    }
+                    else
+                    {
+                        throw new ArgumentException("The submitted parking code is not valid.");
+                    }
+                }
+                
             }
         }
         /// <summary>
@@ -92,10 +115,25 @@ namespace Entities
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                ParkClient client = ReadParkClient(licenseNumber);
-                connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
-                connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID});
-                connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                ParkClient client = new ParkClient();
+                try
+                {
+                    client = ReadParkClient(licenseNumber);
+                }
+                catch
+                {
+                    throw;
+                }
+                if (VerifyParkingCode(companyParkingCode))
+                {
+                    connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
+                    connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                    connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                }
+                else
+                {
+                    throw new ArgumentException("The submitted parking code is not valid.");
+                }
             }
         }
         /// <summary>
@@ -104,28 +142,49 @@ namespace Entities
         /// <param name="client"></param>
         public static void DeleteParkClient(string licenseNumber)
         {
-            LicensePlate licensePlate = new LicensePlate();
+            ParkClient client = new ParkClient();
+            try
+            {
+                client = ReadParkClient(licenseNumber);
+            }
+            catch
+            {
+                throw;
+            }
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                licensePlate = connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
-                connection.Execute("DELETE FROM LicensePlates WHERE LicensePlateID = @LicensePlateID", new { @LicensePlateID = licensePlate.LicensePlateID });
-                connection.Execute("DELETE FROM ParkClients WHERE ParkClientID = @ParkClientIDKey", new { @ParkClientIDKey = licensePlate.ParkClientIDKey });
+                client.LicensePlate = connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
+                connection.Execute("DELETE FROM LicensePlates WHERE LicensePlateID = @LicensePlateID", new { @LicensePlateID = client.LicensePlate.LicensePlateID });
+                connection.Execute("DELETE FROM ParkClients WHERE ParkClientID = @ParkClientID", new { @ParkClientID = client.ParkClientID });
             }
         }
 
-        /*public static List<ParkClient> GenerateDatabase()
+        public static bool VerifyParkingCode(string parkingCode)
         {
-            ParkClients = new List<ParkClient>();
-            for (int i = 0; i < 5; i++)
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
+                Validator.CompanyParkingCodeValidation(parkingCode);
+                bool result = connection.ExecuteScalar<bool>("SELECT 1 WHERE EXISTS (SELECT 1 FROM ParkingCodes WHERE Code = @Code)", new { @Code = parkingCode });
+                return result;
+            }
+        }
+        public static void GenerateDatabase()
+        {
+            List<ClientData> clients = new List<ClientData>();
+            for (int i = 0; i < 10; i++)
+            {
+                ClientData data = new ClientData();
                 LicensePlate licensePlate = new LicensePlate();
                 ParkClient parkClient = new ParkClient();
-                parkClient.LicensePlate = licensePlate.GenerateLicensePlate();
-                parkClient.CompanyParkingCode = parkClient.GenerateParkingCode();
-                ParkClients.Add(parkClient);
+                data.LicenseNumber = licensePlate.GenerateLicensePlate().LicenseNumber;
+                data.CompanyParkingCode = parkClient.GenerateParkingCode();
+                clients.Add(data);
             }
-            return ParkClients;
-        }*/
+            foreach (ClientData data in clients)
+            {
+                CreateParkClient(data);
+            }
+        }
 
     }
 }

@@ -8,6 +8,7 @@ namespace Entities
 {
     public class LicensePlate
     {
+        private string licenseNumber;
         /// <summary>
         /// ID from SQL
         /// </summary>
@@ -21,7 +22,19 @@ namespace Entities
         /// <summary>
         /// The number on the licenseplate, consists of two letters and five numbers
         /// </summary>
-        public string LicenseNumber { get; set; }
+        public string LicenseNumber
+        {
+            get
+            {
+                return licenseNumber;
+            }
+
+            set
+            {
+                Validator.LicenseNumberValidation(value);
+                licenseNumber = value;
+            }
+        }
 
         private static readonly Random random = new Random();
 

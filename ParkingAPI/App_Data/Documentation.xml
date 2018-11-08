@@ -505,12 +505,11 @@
             </summary>
             <returns>A list of licensenumbers in the database.</returns>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Post(System.String,System.String)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Post(Entities.Database.ClientData)">
             <summary>
             Register a new client
             </summary>
-            <param name="licenseNumber">The licenseplate number of the clients vehicle</param>
-            <param name="companyParkingCode">The parking code given to the client by their employers</param>
+            <param name="data">A struct containing the necessary data to register a new client, licensenumber and company parking code</param>
         </member>
         <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.String,System.String)">
             <summary>

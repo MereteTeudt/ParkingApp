@@ -11,6 +11,7 @@ namespace Entities
     /// </summary>
     public class ParkClient
     {
+        private string companyParkingCode;
         /// <summary>
         /// ID from SQL
         /// </summary>
@@ -24,8 +25,18 @@ namespace Entities
         /// <summary>
         /// A code the client needs to register with, given by the company they work for. Implemented for security.
         /// </summary>
-        public string CompanyParkingCode { get; set; }
-
+        public string CompanyParkingCode
+        {
+            get
+            {
+                return companyParkingCode;
+            }
+            set
+            {
+                Validator.CompanyParkingCodeValidation(value);
+                companyParkingCode = value;
+            }
+        }
         private static char[] Code = new char[] { 'A', 'A', 'A', 'A', 'A' };
 
         public string GenerateParkingCode()

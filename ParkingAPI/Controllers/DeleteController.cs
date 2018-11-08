@@ -8,14 +8,9 @@ using System.Web.Mvc;
 
 namespace ParkingAPI.Controllers
 {
-    public class UpdateController : Controller
+    public class DeleteController : Controller
     {
         public ActionResult Index()
-        {
-            return View();
-        }
-
-        public ActionResult UnRegistered()
         {
             return View();
         }

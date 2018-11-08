@@ -6,23 +6,28 @@
         xmlns:local="clr-namespace:ParkingGUI"
         mc:Ignorable="d" FontSize="20"
         Title="Failure" Height="300" Width="400">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Label VerticalAlignment="Bottom" 
-               HorizontalAlignment="Center"
-               Content="{Binding Path=LicenseNumberChecked}"
-               Grid.Column="1" />
-        <Image Source="Images\Cross.jpg"
-               Grid.Row="1"
-               Grid.Column="1" />
-    </Grid>
+    <GroupBox Margin="10"
+              Background="DarkRed">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center"
+                   Background="White"
+                   Content="{Binding Path=LicenseNumberChecked}"
+                   Grid.Column="1" 
+                   Margin="10"/>
+            <Image Source="Images\Cross.jpg"
+                   Grid.Row="1"
+                   Grid.Column="1" />
+        </Grid>
+    </GroupBox>
 </Window>

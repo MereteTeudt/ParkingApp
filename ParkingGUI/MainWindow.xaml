@@ -5,31 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkingGUI"
         mc:Ignorable="d" FontSize="20"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="ParkCorp Scanner" Height="450" Width="800" Background="LightSteelBlue">
+    <GroupBox Margin="40"
+              Background="WhiteSmoke">
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Label Content="Nummerplade: " VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border CornerRadius="2"
+                    BorderBrush="MidnightBlue"
+                    BorderThickness="5"
+                    Margin="5"
+                    Grid.Row="0"
+                    Grid.RowSpan="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="8">
+                <Label Content="ParkCorp Inc."
+                       VerticalContentAlignment="Center"
+                       HorizontalContentAlignment="Center"
+                       Background="MidnightBlue"
+                       Foreground="White"/>
+            </Border>
+            <Separator Width="700"
+                       VerticalAlignment="Top"
+                       Grid.Row="1"
+                       Grid.RowSpan="1"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="8"></Separator>
+            <Label Content="Nummerplade: " 
+               VerticalAlignment="Center" 
+               Grid.Row="1" 
+               Grid.RowSpan="2"
+               Grid.Column="1"
+               Grid.ColumnSpan="2"/>
         <TextBox x:Name="textBoxLicenseNumber" 
                  CharacterCasing="Upper"
                  VerticalAlignment="Center"
                  Grid.Row="1"
-                 Grid.Column="2" />
-        <Button Content="Check" 
-                Margin="10"
-                Grid.Row="1" 
-                Grid.Column="3" 
-                Height="50"
-                Click="Button_Click" />
-    </Grid>
+                 Grid.RowSpan="2"
+                 Grid.Column="3"
+                 Grid.ColumnSpan="2"/>
+        <Border CornerRadius="5"
+                    BorderBrush="SteelBlue"
+                    BorderThickness="3"
+                    Margin="20"
+                    Grid.Row="1"
+                    Grid.RowSpan="2"
+                    Grid.Column="5"
+                    Grid.ColumnSpan="2"
+                    Height="50">
+            <Button Content="Check"
+                    Background="AliceBlue"
+                    BorderThickness="0"
+                    Click="Button_Click" />
+        </Border>
+            <Button Grid.Row="4"
+                    Grid.Column="7"
+                    Margin="20"
+                    Click="Button_Click_1">Data</Button>
+        </Grid>
+    </GroupBox>
 </Window>
