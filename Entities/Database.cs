@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Web.UI.WebControls;
 using Dapper;
 
 namespace Entities
@@ -35,13 +35,12 @@ namespace Entities
                 licensePlate.LicenseNumber = data.LicenseNumber;
                 client.LicensePlate = licensePlate;
                 client.CompanyParkingCode = data.CompanyParkingCode;
-                try
+                if (RegisteredLicensePlate(client.LicensePlate.LicenseNumber))
                 {
-                    ReadParkClient(client.LicensePlate.LicenseNumber);
-                    throw new Exception("The submitted licensenumber is already registered.");
+                    throw new ArgumentException("The submitted licensenumber is already registered.");
                 }
-                catch
-                {
+                else
+                { 
                     if (VerifyParkingCode(client.CompanyParkingCode))
                     {
                         connection.Execute("INSERT INTO ParkClients (CompanyParkingCode) VALUES (@CompanyParkingCode)", new { @CompanyParkingCode = client.CompanyParkingCode });
@@ -89,7 +88,7 @@ namespace Entities
                 }
                 catch (InvalidOperationException)
                 {
-                    throw new Exception("En klient med denne nummerplade findes ikke i databasen");
+                    throw;
                 }
                 licensePlate= connection.QuerySingle<LicensePlate>("SELECT * FROM LicensePlates WHERE LicenseNumber = @LicenseNumber", new { @LicenseNumber = licenseNumber });
                 parkClient = connection.QuerySingle<ParkClient>("SELECT * FROM ParkClients WHERE ParkClientID = @ParkClientIDKey", new { @ParkClientIDKey = licensePlate.ParkClientIDKey });
@@ -115,24 +114,25 @@ namespace Entities
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                ParkClient client = new ParkClient();
-                try
+                if(RegisteredLicensePlate(licenseNumber))
                 {
-                    client = ReadParkClient(licenseNumber);
-                }
-                catch
-                {
-                    throw;
-                }
-                if (VerifyParkingCode(companyParkingCode))
-                {
-                    connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
-                    connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID });
-                    connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                    if (VerifyParkingCode(companyParkingCode))
+                    {
+                        ParkClient client = new ParkClient();
+                        client = ReadParkClient(licenseNumber);
+
+                        connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
+                        connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                        connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
+                    }
+                    else
+                    {
+                        throw new ArgumentException("The submitted parking code is not valid.");
+                    }
                 }
                 else
                 {
-                    throw new ArgumentException("The submitted parking code is not valid.");
+                    throw new ArgumentException("The submitted licenseplate number is not registered.");
                 }
             }
         }
@@ -168,6 +168,20 @@ namespace Entities
                 return result;
             }
         }
+
+        public static bool RegisteredLicensePlate(string licenseNumber)
+        {
+            try
+            {
+                ReadParkClient(licenseNumber);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void GenerateDatabase()
         {
             List<ClientData> clients = new List<ClientData>();

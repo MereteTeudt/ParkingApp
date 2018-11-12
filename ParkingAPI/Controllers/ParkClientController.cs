@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 using static Entities.Database;
 
 namespace ParkingAPI.Controllers
@@ -15,108 +16,116 @@ namespace ParkingAPI.Controllers
     public class ParkClientController : ApiController
     {
         /// <summary>
-        /// Gets a list of clients.
+        /// Returns a list of all the park clients.
         /// </summary>
-        /// <returns>A list of clients.</returns>
-        // GET: api/ParkClient
-        public List<ParkClient> Get()
+        /// <param name="request"></param>
+        /// <returns></returns>
+        // GET: api/ParkClient}
+        public HttpResponseMessage Get(HttpRequestMessage request)
         {
             try
             {
-                return Database.ReadParkClients();
+                return request.CreateResponse(HttpStatusCode.OK, ReadParkClients());
             }
             catch
             {
-                throw new Exception("An unexpected error occured");
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 
         /// <summary>
         /// Gets a ParkClient based on a given licenseplate number.
         /// </summary>
+        /// <param name="request"></param>
         /// <param name="licenseNumber">The licensenumber that the client is registered with. Consists of two letters and five numbers.</param>
         /// <returns>A client with the given licensenumber</returns>
         // GET: api/ParkClient/XX00000
-        public ParkClient Get(string licenseNumber)
+        public HttpResponseMessage Get(HttpRequestMessage request, string licenseNumber)
         {
             try
             {
-                return Database.ReadParkClient(licenseNumber);
+                return request.CreateResponse(HttpStatusCode.OK, ReadParkClient(licenseNumber));
             }
             catch
             {
-                throw;
+
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }
 
         /// <summary>
-        /// Gets a list of licenseplate numbers registered in the database.
+        /// Returns a list of all registered licenseplate numbers.
         /// </summary>
-        /// <returns>A list of licensenumbers in the database.</returns>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Route("api/ParkClient/GetLicenseNumbers")]
-        public List<string> GetLicenseNumbers()
+        public HttpResponseMessage GetLicenseNumbers(HttpRequestMessage request)
         {
             try
             {
-                return Database.ReadLicenseNumbers();
+                return request.CreateResponse(HttpStatusCode.OK, ReadLicenseNumbers());
             }
             catch
             {
-                throw new Exception("An unexpected error occured");
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
         }
 
         /// <summary>
         /// Register a new client
         /// </summary>
+        /// <param name="request"></param>
         /// <param name="data">A struct containing the necessary data to register a new client, licensenumber and company parking code</param>
         // POST: api/ParkClient
-        [System.Web.Mvc.HttpPost]
-        public void Post(ClientData data)
+        public HttpResponseMessage Post(HttpRequestMessage request, ClientData data)
         {
             try
             {
-                Database.CreateParkClient(data);
+                CreateParkClient(data);
+                return request.CreateResponse(HttpStatusCode.Created);
             }
             catch
             {
-                throw;
+                return new HttpResponseMessage(HttpStatusCode.Conflict);
             }
         }
 
         /// <summary>
         /// Updates an existing client.
         /// </summary>
+        /// <param name="request"></param>
         /// <param name="licenseNumber">The licensenumber that the client is registered with.</param>
         /// <param name="companyParkingCode">The parking code to be updated.</param>
         // PUT: api/ParkClient/5
-        public void Put(string licenseNumber, string companyParkingCode)
+        public HttpResponseMessage Put(HttpRequestMessage request, string licenseNumber, string companyParkingCode)
         {
             try
             {
-                Database.UpdateParkClient(licenseNumber, companyParkingCode);
+                UpdateParkClient(licenseNumber, companyParkingCode);
+                return request.CreateResponse(HttpStatusCode.Created);
             }
             catch
             {
-                throw;
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }
 
-        
+
         /// <summary>
         /// Deletes a client from the database.
         /// </summary>
+        /// <param name="request"></param>
         /// <param name="licenseNumber">The licensenumber that the client is registered with.</param>
         // DELETE: api/ParkClient/5
-        public void Delete(string licenseNumber)
+        public HttpResponseMessage Delete(HttpRequestMessage request, string licenseNumber)
         {
             try
             {
-                Database.DeleteParkClient(licenseNumber);
+                return request.CreateResponse(HttpStatusCode.OK);
             }
             catch
             {
-                throw;
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }
     }

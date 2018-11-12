@@ -486,42 +486,48 @@
             This is where I give you all the information about clients registered at the parking facility.
             </summary>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Get">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Get(System.Net.Http.HttpRequestMessage)">
             <summary>
-            Gets a list of clients.
+            Returns a list of all the park clients.
             </summary>
-            <returns>A list of clients.</returns>
+            <param name="request"></param>
+            <returns></returns>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Get(System.String)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Get(System.Net.Http.HttpRequestMessage,System.String)">
             <summary>
             Gets a ParkClient based on a given licenseplate number.
             </summary>
+            <param name="request"></param>
             <param name="licenseNumber">The licensenumber that the client is registered with. Consists of two letters and five numbers.</param>
             <returns>A client with the given licensenumber</returns>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.GetLicenseNumbers">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.GetLicenseNumbers(System.Net.Http.HttpRequestMessage)">
             <summary>
-            Gets a list of licenseplate numbers registered in the database.
+            Returns a list of all registered licenseplate numbers.
             </summary>
-            <returns>A list of licensenumbers in the database.</returns>
+            <param name="request"></param>
+            <returns></returns>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Post(Entities.Database.ClientData)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Post(System.Net.Http.HttpRequestMessage,Entities.Database.ClientData)">
             <summary>
             Register a new client
             </summary>
+            <param name="request"></param>
             <param name="data">A struct containing the necessary data to register a new client, licensenumber and company parking code</param>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.String,System.String)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.Net.Http.HttpRequestMessage,System.String,System.String)">
             <summary>
             Updates an existing client.
             </summary>
+            <param name="request"></param>
             <param name="licenseNumber">The licensenumber that the client is registered with.</param>
             <param name="companyParkingCode">The parking code to be updated.</param>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Delete(System.String)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Delete(System.Net.Http.HttpRequestMessage,System.String)">
             <summary>
             Deletes a client from the database.
             </summary>
+            <param name="request"></param>
             <param name="licenseNumber">The licensenumber that the client is registered with.</param>
         </member>
     </members>
