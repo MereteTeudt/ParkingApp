@@ -97,11 +97,11 @@ namespace ParkingAPI.Controllers
         /// <param name="licenseNumber">The licensenumber that the client is registered with.</param>
         /// <param name="companyParkingCode">The parking code to be updated.</param>
         // PUT: api/ParkClient/5
-        public HttpResponseMessage Put(HttpRequestMessage request, string licenseNumber, string companyParkingCode)
+        public HttpResponseMessage Put(HttpRequestMessage request, ClientData client)
         {
             try
             {
-                UpdateParkClient(licenseNumber, companyParkingCode);
+                UpdateParkClient(client);
                 return request.CreateResponse(HttpStatusCode.Created);
             }
             catch (ArgumentException ex) when (ex.Message == "The submitted parking code is not valid.")

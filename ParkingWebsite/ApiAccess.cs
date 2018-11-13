@@ -11,16 +11,34 @@ namespace ParkingWebsite
 {
     public class ApiAccess
     {
-        private static string baseUrl = "http://localhost:6185/api/ParkClient";
-        public static async Task<HttpResponseMessage> ApiProcessor(ClientModel client)
+        private static string url = "http://localhost:6185/api/ParkClient";
+        public static async Task<HttpResponseMessage> ApiProcessor(ClientModel client, string typeOfCall)
         {
             ApiHelper.InitializeClient();
 
-            string url = $"{baseUrl}?LicenseNumber={client.LicensePlateNumber}&CompanyParkingCode={client.CompanyParkingCode}";
-
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            if (typeOfCall == "Post")
             {
-                return response;
+                
+                using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, client))
+                {
+                    return response;
+                }
+            }
+            else if (typeOfCall == "Put")
+            {
+
+                using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsJsonAsync(url, client))
+                {
+                    return response;
+                }
+            }
+            else
+            {
+
+                using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, client))
+                {
+                    return response;
+                }
             }
         }
     }

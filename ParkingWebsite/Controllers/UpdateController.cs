@@ -3,6 +3,7 @@ using ParkingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,11 +25,23 @@ namespace ParkingWebsite.Controllers
             response.Success = ModelState.IsValid;
             if(response.Success)
             {
-                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client).Result;
+                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client, "Post").Result;
+
+                if(responseMessage.StatusCode == HttpStatusCode.Conflict)
+                {
+                    response.ResponseMessage = "The submitted parking code is not valid.";
+
+                    return View("Response", response);
+                }
+                else
+                {
+                    response.ResponseMessage = "The submitted license number is not registered.";
+
+                    return View("Response", response);
+                }
             }
             else
             {
-                response.ResponseMessage = "Failed to update.";
                 return View("Index", client);
             }
         }

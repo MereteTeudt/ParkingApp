@@ -515,7 +515,7 @@
             <param name="request"></param>
             <param name="data">A struct containing the necessary data to register a new client, licensenumber and company parking code</param>
         </member>
-        <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+        <member name="M:ParkingAPI.Controllers.ParkClientController.Put(System.Net.Http.HttpRequestMessage,Entities.Database.ClientData)">
             <summary>
             Updates an existing client.
             </summary>

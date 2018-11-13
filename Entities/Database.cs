@@ -110,18 +110,18 @@ namespace Entities
         /// UPDATE
         /// </summary>
         /// <param name="client"></param>
-        public static void UpdateParkClient(string licenseNumber, string companyParkingCode)
+        public static void UpdateParkClient(ClientData clientData)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConString("ParkingDatabase")))
             {
-                if(RegisteredLicensePlate(licenseNumber))
+                if(RegisteredLicensePlate(clientData.LicenseNumber))
                 {
-                    if (VerifyParkingCode(companyParkingCode))
+                    if (VerifyParkingCode(clientData.CompanyParkingCode))
                     {
                         ParkClient client = new ParkClient();
-                        client = ReadParkClient(licenseNumber);
+                        client = ReadParkClient(clientData.LicenseNumber);
 
-                        connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = companyParkingCode, @ParkClientID = client.ParkClientID });
+                        connection.Execute("UPDATE ParkClients SET CompanyParkingCode = @CompanyParkingCode WHERE ParkClientID = @ParkClientID", new { @CompanyParkingCode = clientData.CompanyParkingCode, @ParkClientID = client.ParkClientID });
                         connection.Execute("UPDATE LicensePlates SET LicenseNumber = @LicenseNumber WHERE LicensePlateID = @LicensePlateID", new { @LicenseNumber = client.LicensePlate.LicenseNumber, @LicensePlateID = client.LicensePlate.LicensePlateID });
                         connection.Execute("UPDATE LicensePlates SET ParkClientIDKey = @ParkClientIDKey WHERE LicensePlateID = @LicensePlateID", new { @ParkClientIDKey = client.LicensePlate.ParkClientIDKey, @LicensePlateID = client.LicensePlate.LicensePlateID });
                     }
