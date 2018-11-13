@@ -104,7 +104,11 @@ namespace ParkingAPI.Controllers
                 UpdateParkClient(licenseNumber, companyParkingCode);
                 return request.CreateResponse(HttpStatusCode.Created);
             }
-            catch
+            catch (ArgumentException ex) when (ex.Message == "The submitted parking code is not valid.")
+            {
+                return new HttpResponseMessage(HttpStatusCode.Conflict);
+            }
+            catch (ArgumentException ex) when (ex.Message == "The submitted licenseplate number is not registered.")
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }

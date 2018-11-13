@@ -1,4 +1,5 @@
 ﻿using Entities;
+using ParkingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,27 +12,24 @@ namespace ParkingWebsite.Controllers
 {
     public class UpdateController : Controller
     {
-        private string baseUrl = $"http://localhost:6185/api/ParkClient";
-
         // GET: Update
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Result(string licenseNumber, string companyParkingCode)
+        public ActionResult Result(ClientModel client)
         {
-            string url = baseUrl + "?LicenseNumber=" + licenseNumber + "&CompanyParkingCode=" + companyParkingCode;
-            using (HttpResponseMessage response = ApiHelper.ApiClient.GetAsync(url).Result)
+            ResponseModel response = new ResponseModel();
+            response.Success = ModelState.IsValid;
+            if(response.Success)
             {
-                if(response.IsSuccessStatusCode)
-                {
-                    return View("ResultPositive");
-                }
-                else
-                {
-                    return View("ResultNegative");
-                }
+                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client).Result;
+            }
+            else
+            {
+                response.ResponseMessage = "Failed to update.";
+                return View("Index", client);
             }
         }
     }
