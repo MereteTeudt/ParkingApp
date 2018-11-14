@@ -84,9 +84,13 @@ namespace ParkingAPI.Controllers
                 CreateParkClient(data);
                 return request.CreateResponse(HttpStatusCode.Created);
             }
-            catch
+            catch (ArgumentException ex) when (ex.Message == "Code")
             {
                 return new HttpResponseMessage(HttpStatusCode.Conflict);
+            }
+            catch (ArgumentException ex) when (ex.Message == "Number")
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }
 

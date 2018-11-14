@@ -37,7 +37,7 @@ namespace Entities
                 client.CompanyParkingCode = data.CompanyParkingCode;
                 if (RegisteredLicensePlate(client.LicensePlate.LicenseNumber))
                 {
-                    throw new ArgumentException("The submitted licensenumber is already registered.");
+                    throw new ArgumentException("Number");
                 }
                 else
                 { 
@@ -49,7 +49,7 @@ namespace Entities
                     }
                     else
                     {
-                        throw new ArgumentException("The submitted parking code is not valid.");
+                        throw new ArgumentException("Code");
                     }
                 }
                 

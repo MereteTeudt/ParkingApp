@@ -204,9 +204,11 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Update\Index.cshtml" />
-    <Content Include="Views\Delete\Index.cshtml" />
-    <Content Include="Views\Create\Index.cshtml" />
     <Content Include="Views\Update\Response.cshtml" />
+    <Content Include="Views\Create\Response.cshtml" />
+    <Content Include="Views\Create\Index.cshtml" />
+    <Content Include="Views\Delete\Index.cshtml" />
+    <Content Include="Views\Delete\Response.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

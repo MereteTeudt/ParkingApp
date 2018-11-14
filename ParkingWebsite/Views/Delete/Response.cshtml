@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Response";
+}
+
+@model ParkingWebsite.Models.ResponseModel
+<div class="row">
+<div class="col-md-4"></div>
+<div class="col-md-4">
+@Html.TextArea("Message", Model.ResponseMessage, new { @class = "page-header text-center col-md-12 bg-success" })
+</div>
+<div class="col-md-4"></div>
+</div>
+
