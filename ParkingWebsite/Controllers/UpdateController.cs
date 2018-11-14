@@ -21,23 +21,28 @@ namespace ParkingWebsite.Controllers
 
         public ActionResult Result(ClientModel client)
         {
-            ResponseModel response = new ResponseModel();
-            response.Success = ModelState.IsValid;
-            if(response.Success)
+            ResponseModel responseModel = new ResponseModel();
+            if(ModelState.IsValid)
             {
-                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client, "Post").Result;
+                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client, "Put").Result;
 
                 if(responseMessage.StatusCode == HttpStatusCode.Conflict)
                 {
-                    response.ResponseMessage = "The submitted parking code is not valid.";
+                    responseModel.ResponseMessage = "The submitted parking code is not valid.";
 
-                    return View("Response", response);
+                    return View("Response", responseModel);
+                }
+                else if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    responseModel.ResponseMessage = "The submitted license number is not registered.";
+
+                    return View("Response", responseModel);
                 }
                 else
                 {
-                    response.ResponseMessage = "The submitted license number is not registered.";
+                    responseModel.ResponseMessage = "The client was successfully updated.";
 
-                    return View("Response", response);
+                    return View("Response", responseModel);
                 }
             }
             else

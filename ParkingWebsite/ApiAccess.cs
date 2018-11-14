@@ -11,32 +11,47 @@ namespace ParkingWebsite
 {
     public class ApiAccess
     {
-        private static string url = "http://localhost:6185/api/ParkClient";
+        private static string baseUrl = "http://localhost:6185";
+        private static string requestUri = "/api/ParkClient";
+        private static string deleteUri = requestUri;
         public static async Task<HttpResponseMessage> ApiProcessor(ClientModel client, string typeOfCall)
         {
-            ApiHelper.InitializeClient();
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(baseUrl);
+
+            var list = new List<KeyValuePair<string, string>>();
+            list.Add(new KeyValuePair<string, string>("LicenseNumber", client.LicensePlateNumber));
+            list.Add(new KeyValuePair<string, string>("CompanyParkingCode", client.CompanyParkingCode));
+
+            var content = new FormUrlEncodedContent(list);
+
 
             if (typeOfCall == "Post")
             {
-                
-                using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, client))
+                using (httpClient)
                 {
+                    HttpResponseMessage response = httpClient.PostAsync(requestUri, content).Result;
+
                     return response;
                 }
             }
             else if (typeOfCall == "Put")
             {
 
-                using (HttpResponseMessage response = await ApiHelper.ApiClient.PutAsJsonAsync(url, client))
+                using (httpClient)
                 {
+                    HttpResponseMessage response = httpClient.PutAsync(requestUri, content).Result;
+
                     return response;
                 }
             }
             else
             {
-
-                using (HttpResponseMessage response = await ApiHelper.ApiClient.PostAsJsonAsync(url, client))
+                deleteUri += $"?licenseNumber={client.LicensePlateNumber}";
+                using (httpClient)
                 {
+                    HttpResponseMessage response = httpClient.DeleteAsync(deleteUri).Result;
+
                     return response;
                 }
             }

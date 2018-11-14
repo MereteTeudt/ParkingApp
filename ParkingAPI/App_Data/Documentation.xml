@@ -520,8 +520,7 @@
             Updates an existing client.
             </summary>
             <param name="request"></param>
-            <param name="licenseNumber">The licensenumber that the client is registered with.</param>
-            <param name="companyParkingCode">The parking code to be updated.</param>
+            <param name="client"></param>
         </member>
         <member name="M:ParkingAPI.Controllers.ParkClientController.Delete(System.Net.Http.HttpRequestMessage,System.String)">
             <summary>

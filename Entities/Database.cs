@@ -127,12 +127,12 @@ namespace Entities
                     }
                     else
                     {
-                        throw new ArgumentException("The submitted parking code is not valid.");
+                        throw new ArgumentException("Code");
                     }
                 }
                 else
                 {
-                    throw new ArgumentException("The submitted licenseplate number is not registered.");
+                    throw new ArgumentException("Number");
                 }
             }
         }

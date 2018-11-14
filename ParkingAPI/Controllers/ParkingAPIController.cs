@@ -94,8 +94,7 @@ namespace ParkingAPI.Controllers
         /// Updates an existing client.
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="licenseNumber">The licensenumber that the client is registered with.</param>
-        /// <param name="companyParkingCode">The parking code to be updated.</param>
+        /// <param name="client"></param>
         // PUT: api/ParkClient/5
         public HttpResponseMessage Put(HttpRequestMessage request, ClientData client)
         {
@@ -104,11 +103,11 @@ namespace ParkingAPI.Controllers
                 UpdateParkClient(client);
                 return request.CreateResponse(HttpStatusCode.Created);
             }
-            catch (ArgumentException ex) when (ex.Message == "The submitted parking code is not valid.")
+            catch (ArgumentException ex) when (ex.Message == "Code")
             {
                 return new HttpResponseMessage(HttpStatusCode.Conflict);
             }
-            catch (ArgumentException ex) when (ex.Message == "The submitted licenseplate number is not registered.")
+            catch (ArgumentException ex) when (ex.Message == "Number")
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
@@ -125,6 +124,7 @@ namespace ParkingAPI.Controllers
         {
             try
             {
+                DeleteParkClient(licenseNumber);
                 return request.CreateResponse(HttpStatusCode.OK);
             }
             catch
