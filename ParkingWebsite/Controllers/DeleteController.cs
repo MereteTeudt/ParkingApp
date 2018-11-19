@@ -20,9 +20,9 @@ namespace ParkingWebsite.Controllers
         public ActionResult Result(ClientModel client)
         {
             ResponseModel responseModel = new ResponseModel();
-            if (ModelState.IsValid)
+            if (client.LicensePlateNumber != null)
             {
-                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client, "Post").Result;
+                HttpResponseMessage responseMessage = ApiAccess.ApiProcessor(client, "Delete").Result;
 
                 if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -32,7 +32,7 @@ namespace ParkingWebsite.Controllers
                 }
                 else
                 {
-                    responseModel.ResponseMessage = "The client was successfully created.";
+                    responseModel.ResponseMessage = "The client was successfully deleted.";
 
                     return View("Response", responseModel);
                 }

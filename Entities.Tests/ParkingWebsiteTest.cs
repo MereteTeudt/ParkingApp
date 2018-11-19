@@ -22,7 +22,7 @@ namespace Entities.Tests
             clientModel.CompanyParkingCode = "AAAAF";
             clientModel.LicensePlateNumber = "HI98466";
             HttpResponseMessage expectedResponse = new HttpResponseMessage();
-            expectedResponse.StatusCode = System.Net.HttpStatusCode.Created;
+            expectedResponse.StatusCode = System.Net.HttpStatusCode.OK;
             string expectedString = expectedResponse.StatusCode.ToString();
 
             // Act

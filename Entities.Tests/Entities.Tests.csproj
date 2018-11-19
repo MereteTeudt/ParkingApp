@@ -83,7 +83,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseTest.cs" />
     <Compile Include="ParkingCodeTest.cs" />
     <Compile Include="ParkingWebsiteTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
