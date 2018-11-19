@@ -90,7 +90,7 @@ namespace ParkingAPI.Controllers
             }
             catch (ArgumentException ex) when (ex.Message == "Number")
             {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+                return new HttpResponseMessage(HttpStatusCode.Conflict);
             }
         }
 
@@ -105,7 +105,7 @@ namespace ParkingAPI.Controllers
             try
             {
                 UpdateParkClient(client);
-                return request.CreateResponse(HttpStatusCode.Created);
+                return request.CreateResponse(HttpStatusCode.OK);
             }
             catch (ArgumentException ex) when (ex.Message == "Code")
             {

@@ -13,24 +13,6 @@ namespace Entities.Tests
 {
     public class ParkingWebsiteTest
     {
-        [Fact]
-        public void ApiProcessor_ReturnsHttpResponseonPost()
-        {
-            // Arrange
-            ClientModel clientModel = new ClientModel();
-            clientModel.CompanyParkingCode = "AAAAB";
-            clientModel.LicensePlateNumber = "AA11111";
-            HttpResponseMessage expectedResponse = new HttpResponseMessage();
-            expectedResponse.StatusCode = System.Net.HttpStatusCode.Created;
-            string expectedString = expectedResponse.StatusCode.ToString();
-
-            // Act
-            HttpResponseMessage actualResponse = ApiAccess.ApiProcessor(clientModel, "Post").Result;
-            string actualString = actualResponse.StatusCode.ToString();
-
-            // Assert
-            Assert.Equal(expectedString, actualString);
-        }
 
         [Fact]
         public void ApiProcessor_ReturnsHttpResponseOnPut()
@@ -52,22 +34,30 @@ namespace Entities.Tests
         }
 
         [Fact]
-        public void ApiProcessor_ReturnsHttpResponseOnDelete()
+        public void ApiProcessor_ReturnsHttpResponseOnCreateAndDelete()
         {
             // Arrange
             ClientModel clientModel = new ClientModel();
             clientModel.CompanyParkingCode = "AAAAB";
             clientModel.LicensePlateNumber = "AA11111";
-            HttpResponseMessage expectedResponse = new HttpResponseMessage();
-            expectedResponse.StatusCode = System.Net.HttpStatusCode.OK;
-            string expectedString = expectedResponse.StatusCode.ToString();
+
+            HttpResponseMessage expectedCreateResponse = new HttpResponseMessage();
+            expectedCreateResponse.StatusCode = System.Net.HttpStatusCode.Created;
+            string expectedCreateString = expectedCreateResponse.StatusCode.ToString();
+
+            HttpResponseMessage expectedDeleteResponse = new HttpResponseMessage();
+            expectedDeleteResponse.StatusCode = System.Net.HttpStatusCode.OK;
+            string expectedDeleteString = expectedDeleteResponse.StatusCode.ToString();
 
             // Act
-            HttpResponseMessage actualResponse = ApiAccess.ApiProcessor(clientModel, "Delete").Result;
-            string actualString = actualResponse.StatusCode.ToString();
+            HttpResponseMessage actualCreateResponse = ApiAccess.ApiProcessor(clientModel, "Post").Result;
+            string actualCreateString = actualCreateResponse.StatusCode.ToString();
+            HttpResponseMessage actualDeleteResponse = ApiAccess.ApiProcessor(clientModel, "Delete").Result;
+            string actualDeleteString = actualDeleteResponse.StatusCode.ToString();
 
             // Assert
-            Assert.Equal(expectedString, actualString);
+            Assert.Equal(expectedCreateString, actualCreateString);
+            Assert.Equal(expectedDeleteString, actualDeleteString);
         }
     }
 }
